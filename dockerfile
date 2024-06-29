@@ -3,15 +3,14 @@ LABEL maintainer="Paradoxxs"
 # title
 ENV TITLE=Brave
 
-
-RUN curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-RUN echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
 # Install dependencies
-RUN apt-get update
-RUN apt install -y brave-browser
-
-COPY /root /
-
+RUN curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list \
+    && apt-get update \
+    && apt-get install -y brave-browser python3-xdg
 
 # Expose VNC
-EXPOSE 3000 
+EXPOSE 3000
+
+# Copy necessary files if any
+COPY /root /
